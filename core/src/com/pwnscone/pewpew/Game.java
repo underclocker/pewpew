@@ -3,6 +3,7 @@ package com.pwnscone.pewpew;
 import com.badlogic.gdx.ApplicationAdapter;
 
 public class Game extends ApplicationAdapter {
+
 	private Renderer renderer;
 	private Simulation simulation;
 
@@ -17,5 +18,10 @@ public class Game extends ApplicationAdapter {
 	public void render () {
 		simulation.update();
 		renderer.update();
+	}
+	
+	@Override
+	public void resize(int width, int height ){
+		renderer.reset();
 	}
 }

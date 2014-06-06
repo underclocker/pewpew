@@ -17,28 +17,42 @@ public class Renderer {
 	private SpriteBatch spriteBatch;
 	private OrthographicCamera camera;
 	private LineRenderer lineRenderer;
-	
+
 	private Simulation simulation;
-	
+
 	public Renderer() {
 		spriteBatch = new SpriteBatch();
 		camera = new OrthographicCamera();
-		lineRenderer = new LineRenderer();
+		lineRenderer = new LineRenderer(camera);
 		reset();
 	}
 
 	public void update() {
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		lineRenderer.drawLine(simulation.particleArray[0].x, simulation.particleArray[0].y, Color.GREEN, 4, 4, Color.RED);
-		lineRenderer.drawLine(0, 0, Color.BLUE, 8, 4, Color.GREEN);
-		lineRenderer.render(camera);
+		Spring[] springArray = simulation.springArray;
+		for (int i = 0; i < simulation.springs; i++) {
+			Spring spring = springArray[i];
+			Particle p0 = spring.p0;
+			Particle p1 = spring.p1;
+			lineRenderer.drawLine(p0.x, p0.y, Color.WHITE, p1.x, p1.y, Color.WHITE);
+		}
+		lineRenderer.render();
 	}
 
-	private void reset() {
-		camera.setToOrtho(false, WIDTH, HEIGHT);
+	public void reset() {
+		int width = Gdx.graphics.getWidth();
+		int height = Gdx.graphics.getHeight();
+		float ratio =((float) width / height) / ((float) WIDTH / HEIGHT);
+		if (ratio == 1.0) {
+			camera.setToOrtho(false, WIDTH, HEIGHT);
+		} else if (ratio > 1.0){
+			camera.setToOrtho(false, WIDTH * ratio, HEIGHT);
+		} else if (ratio < 1.0){
+			camera.setToOrtho(false, WIDTH , HEIGHT / ratio);
+		}
 		Gdx.gl.glDepthMask(false);
-		Gdx.gl.glLineWidth(5);
+		Gdx.gl.glLineWidth(1.0f);
 	}
 
 	public void setSimulation(Simulation simulation) {

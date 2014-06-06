@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class LineRenderer {
-	private static final int MAX_VERTS = 1024 * 1024;
+	private static final int MAX_VERTS = 1024;
 	private static final int POSITION_COMPONENTS = 2;
 	private static final int COLOR_COMPONENTS = 4;
 	private static final int TOTAL_COMPONENTS = POSITION_COMPONENTS + COLOR_COMPONENTS;
@@ -25,18 +25,23 @@ public class LineRenderer {
 
 	private Mesh mesh;
 	private ShaderProgram shader;
+	private Camera camera;
 
 	private float[] verts = new float[MAX_VERTS * TOTAL_COMPONENTS];
 	private int index = 0;
 
-	public LineRenderer() {
+	public LineRenderer(Camera camera) {
 		mesh = new Mesh(true, MAX_VERTS, 0, new VertexAttribute(Usage.Position,
 				POSITION_COMPONENTS, "a_position"), new VertexAttribute(Usage.Color,
 				COLOR_COMPONENTS, "a_color"));
 		shader = new ShaderProgram(VERT_SHADER, FRAG_SHADER);
+		this.camera = camera;
 	}
 
 	public void drawLine(float x0, float y0, Color color0, float x1, float y1, Color color1) {
+		if (index == verts.length)
+			render();
+
 		verts[index++] = x0;
 		verts[index++] = y0;
 		verts[index++] = color0.r;
@@ -52,7 +57,10 @@ public class LineRenderer {
 		verts[index++] = color1.a;
 	}
 
-	public void render(Camera camera) {
+	public void render() {
+		if (index <= 0)
+			return;
+
 		mesh.setVertices(verts);
 		int vertNum = index / TOTAL_COMPONENTS;
 

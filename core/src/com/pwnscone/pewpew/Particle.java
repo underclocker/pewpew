@@ -11,7 +11,7 @@ public class Particle {
 	public float oy;
 	public float oz;
 	
-	public float dampening = 0.99f;
+	public float dampening = 0.95f;
 
 	public void update() {
 		float tempX = x;
