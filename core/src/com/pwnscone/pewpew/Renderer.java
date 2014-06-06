@@ -30,7 +30,7 @@ public class Renderer {
 	public void update() {
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		lineRenderer.drawLine(0, 0, Color.GREEN, 4, 4, Color.RED);
+		lineRenderer.drawLine(simulation.particleArray[0].x, simulation.particleArray[0].y, Color.GREEN, 4, 4, Color.RED);
 		lineRenderer.drawLine(0, 0, Color.BLUE, 8, 4, Color.GREEN);
 		lineRenderer.render(camera);
 	}
