@@ -1,30 +1,32 @@
 package com.pwnscone.pewpew;
 
 public class Particle {
-	
+
 	public int index;
-	
+
+	// Current Position
 	public float x;
 	public float y;
 	public float z;
+	// Last Position
 	public float ox;
 	public float oy;
 	public float oz;
-	
+
 	public float dampening = 0.95f;
 
 	public void update() {
-		float tempX = x;
-		float tempY = y;
-		float tempZ = z;
+		float tx = x;
+		float ty = y;
+		float tz = z;
 
 		x += (x - ox) * dampening;
 		y += (y - oy) * dampening;
 		z += (z - oz) * dampening;
-		
-		ox = tempX;
-		oy = tempY;
-		oz = tempZ;
+
+		ox = tx;
+		oy = ty;
+		oz = tz;
 	}
 
 	public void setPosition(float x, float y, float z) {

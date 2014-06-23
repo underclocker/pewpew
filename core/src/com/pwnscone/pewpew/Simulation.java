@@ -13,21 +13,22 @@ public class Simulation {
 		particleArray = new Particle[MAX_PARTICLES];
 		springArray = new Spring[MAX_SPRINGS];
 
-		for (int i = 0; i < 3000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			Particle p0 = addParticle();
-			p0.setPosition((float) (9.0 * Math.random()), (float) (16.0 * Math.random()));
+			p0.setPosition((float) (32.0 * Math.random() - 16), (float) (32.0 * Math.random() - 16));
 			Particle p1 = addParticle();
-			p1.setPosition((float) (9.0 * Math.random()), (float) (16.0 * Math.random()));
+			p1.setPosition((float) (32.0 * Math.random() - 16), (float) (32.0 * Math.random() - 16));
 			Particle p2 = addParticle();
-			p2.setPosition((float) (9.0 * Math.random()), (float) (16.0 * Math.random()));
+			p2.setPosition((float) (32.0 * Math.random() - 16), (float) (32.0 * Math.random() - 16));
 			Particle p3 = addParticle();
-			p3.setPosition((float) (9.0 * Math.random()), (float) (16.0 * Math.random()), 1.0f);
-			addSpring(p0, p1, .5f);
-			addSpring(p1, p2, .5f);
-			addSpring(p2, p0, .5f);
-			addSpring(p3, p0, .5f);
-			addSpring(p3, p1, .5f);
-			addSpring(p3, p2, .5f);
+			p3.setPosition((float) (32.0 * Math.random() - 16),
+					(float) (32.0 * Math.random() - 16), 1.0f);
+			addSpring(p0, p1, .25f);
+			addSpring(p1, p2, .25f);
+			addSpring(p2, p0, .25f);
+			addSpring(p3, p0, .25f);
+			addSpring(p3, p1, .25f);
+			addSpring(p3, p2, .25f);
 		}
 	}
 

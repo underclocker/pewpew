@@ -2,7 +2,7 @@ package com.pwnscone.pewpew;
 
 public class Spring {
 
-	public static final float dampening = 0.35f;
+	public static final float dampening = 0.25f;
 
 	public int index;
 
@@ -12,13 +12,20 @@ public class Spring {
 
 	public void update() {
 
-		float deltaX = p0.x - p1.x + ((p0.x - p0.ox) - (p1.x - p1.ox)) * dampening;
-		float deltaY = p0.y - p1.y + ((p0.y - p0.oy) - (p1.y - p1.oy)) * dampening;
-		float deltaZ = p0.z - p1.z + ((p0.z - p0.oz) - (p1.z - p1.oz)) * dampening;
+		float deltaX = p0.x - p1.x;
+		float deltaY = p0.y - p1.y;
+		float deltaZ = p0.z - p1.z;
 
+		// slow
+
+		// float dist = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY +
+		// deltaZ * deltaZ);
+		// float diff = (float) (dist - Math.sqrt(length2)) / dist;
+		// diff *= -0.5f;
+
+		// fast
 		float dist2 = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
-
-		float diff = (length2) / (dist2 + length2) - 0.5f;
+		float diff = ((length2) / (dist2 + length2) - 0.5f) * dampening;
 
 		deltaX *= diff;
 		deltaY *= diff;
