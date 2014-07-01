@@ -14,7 +14,7 @@ public class BackgroundInputProcessor implements InputProcessor {
 		lastDown = new Vector3();
 		lastMove = new Vector3();
 		screenPivot = new Vector3();
-		screenPivot.set(0, 7f, 0);
+		screenPivot.set(0.0f, 7.0f, 0.0f);
 		Camera camera = Game.get().getRenderer().getCamera();
 		camera.project(screenPivot);
 	}

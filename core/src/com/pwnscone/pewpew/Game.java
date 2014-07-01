@@ -28,12 +28,15 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create() {
 		GAME = this;
+		MeshManager.loadMeshes();
 		renderer = new Renderer();
 		simulation = new Simulation();
 		backgroundInputProcessor = new BackgroundInputProcessor();
 		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(backgroundInputProcessor);
 		Gdx.input.setInputProcessor(inputMultiplexer);
+
+		simulation.create();
 	}
 
 	@Override

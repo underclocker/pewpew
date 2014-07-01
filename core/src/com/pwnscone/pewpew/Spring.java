@@ -39,9 +39,9 @@ public class Spring {
 		p1.oz += deltaZ;
 	}
 
-	public void set(Particle p0, Particle p1, float length) {
+	public void set(Particle p0, Particle p1, float length2) {
 		this.p0 = p0;
 		this.p1 = p1;
-		this.length2 = length * length;
+		this.length2 = length2;
 	}
 }

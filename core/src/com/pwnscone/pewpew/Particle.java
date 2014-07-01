@@ -8,6 +8,7 @@ public class Particle {
 	public float x;
 	public float y;
 	public float z;
+
 	// Last Position
 	public float ox;
 	public float oy;
