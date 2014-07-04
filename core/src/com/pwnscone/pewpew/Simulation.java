@@ -38,6 +38,7 @@ public class Simulation {
 	}
 
 	public void create() {
+		Actor a = null;
 		for (int i = 0; i < 2000; i++) {
 			Tetra t = ((Tetra) mActorMap.get(Tetra.class).add()).create();
 			t.setTransform((float) (6.0f * Math.random() - 3.0f),

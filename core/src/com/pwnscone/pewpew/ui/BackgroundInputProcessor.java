@@ -83,7 +83,7 @@ public class BackgroundInputProcessor implements InputProcessor {
 
 	public void update() {
 		Camera camera = Game.get().getRenderer().getCamera();
-		float delta = rotation * .5f;
+		float delta = rotation * .25f;
 		rotation -= delta;
 		camera.rotateAround(Vector3.Zero, camera.direction, delta);
 	}

@@ -14,6 +14,10 @@ public class Actor extends Poolable {
 	protected Particle[] particles;
 	protected Spring[] springs;
 
+	// Each actor is responsible for keeping their properties up to date.
+	public float x;
+	public float y;
+
 	public Actor() {
 		Mesh m = MeshManager.getMesh(this.getClass());
 		particles = new Particle[m.particles.length];
