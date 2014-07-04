@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.pwnscone.pewpew.util.Pool;
+import com.pwnscone.pewpew.util.Util;
 
 public class Renderer {
+	private static final boolean DEBUG = true;
+
 	public static final int HEIGHT = 16;
 	public static final int WIDTH = 9;
 
@@ -26,13 +30,24 @@ public class Renderer {
 		camera.update();
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Simulation simulation = Game.get().getSimulation();
-		Spring[] springArray = simulation.springArray;
-		for (int i = 0; i < simulation.springs; i++) {
-			Spring spring = springArray[i];
+		Pool<Spring> springPool = Game.get().getSimulation().mSpringPool;
+		for (int i = 0; i < springPool.fill; i++) {
+			Spring spring = springPool.get(i);
 			Particle p0 = spring.p0;
 			Particle p1 = spring.p1;
-			lineRenderer.drawLine(p0.x, p0.y, Color.WHITE, p1.x, p1.y, Color.WHITE);
+			lineRenderer.drawLine(p0.curPos, Color.WHITE, p1.curPos, Color.WHITE);
+		}
+		if (DEBUG) {
+			Pool<Particle> particlePool = Game.get().getSimulation().mParticlePool;
+			for (int i = 0; i < particlePool.fill; i++) {
+				Particle particle = particlePool.get(i);
+				if (particle.mark) {
+					Util.T1.set(particle.curPos).add(.05f, .05f, .05f);
+					lineRenderer.drawLine(particle.curPos, Color.GREEN, Util.T1, Color.GREEN);
+					Util.T1.set(particle.curPos).sub(0, .1f, 0);
+					lineRenderer.drawLine(particle.curPos, Color.GREEN, Util.T1, Color.GREEN);
+				}
+			}
 		}
 		lineRenderer.render();
 	}

@@ -3,6 +3,7 @@ package com.pwnscone.pewpew;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.pwnscone.pewpew.ui.BackgroundInputProcessor;
 
 public class Game extends ApplicationAdapter {
 

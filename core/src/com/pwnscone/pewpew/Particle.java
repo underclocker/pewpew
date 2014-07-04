@@ -1,62 +1,55 @@
 package com.pwnscone.pewpew;
 
-public class Particle {
+import com.badlogic.gdx.math.Vector3;
+import com.pwnscone.pewpew.util.Poolable;
+import com.pwnscone.pewpew.util.Util;
 
-	public int index;
+public class Particle extends Poolable {
+
+	public boolean mark;
 
 	// Current Position
-	public float x;
-	public float y;
-	public float z;
+	public Vector3 curPos;
 
 	// Last Position
-	public float ox;
-	public float oy;
-	public float oz;
+	public Vector3 oldPos;
 
-	public float dampening = 0.95f;
+	public float dampening = 0.9f;
+
+	public Particle() {
+		curPos = new Vector3();
+		oldPos = new Vector3();
+	}
 
 	public void update() {
-		float tx = x;
-		float ty = y;
-		float tz = z;
-
-		x += (x - ox) * dampening;
-		y += (y - oy) * dampening;
-		z += (z - oz) * dampening;
-
-		ox = tx;
-		oy = ty;
-		oz = tz;
+		Util.T1.set(curPos);
+		Util.T2.set(curPos).sub(oldPos).scl(dampening);
+		curPos.add(Util.T2);
+		oldPos.set(Util.T1);
 	}
 
 	public void setPosition(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.ox = x;
-		this.oy = y;
-		this.oz = z;
+		curPos.set(x, y, z);
+		oldPos.set(x, y, z);
 	}
 
 	public void setPosition(float x, float y) {
-		this.x = x;
-		this.y = y;
-		this.z = 0.0f;
-		this.ox = x;
-		this.oy = y;
-		this.oz = 0.0f;
+		setPosition(x, y, 0);
+	}
+
+	public void setPosition(Vector3 pos) {
+		setPosition(pos.x, pos.y, pos.z);
 	}
 
 	public void setVelocity(float vx, float vy, float vz) {
-		ox = x - vx;
-		oy = y - vy;
-		oz = z - vz;
+		oldPos.set(curPos).sub(vx, vy, vz);
 	}
 
 	public void setVelocity(float vx, float vy) {
-		ox = x - vx;
-		oy = y - vy;
-		oz = z;
+		setVelocity(vx, vy, 0);
+	}
+
+	public void setVelocity(Vector3 vel) {
+		oldPos.set(curPos).sub(vel);
 	}
 }

@@ -3,6 +3,7 @@ package com.pwnscone.pewpew;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
+import com.pwnscone.pewpew.actor.Tetra;
 
 public class MeshManager {
 	private static HashMap<Class, Mesh> MESH_MAP = new HashMap<Class, Mesh>();

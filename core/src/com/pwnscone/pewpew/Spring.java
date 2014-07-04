@@ -1,6 +1,9 @@
 package com.pwnscone.pewpew;
 
-public class Spring {
+import com.pwnscone.pewpew.util.Poolable;
+import com.pwnscone.pewpew.util.Util;
+
+public class Spring extends Poolable {
 
 	public static final float dampening = 0.25f;
 
@@ -11,32 +14,14 @@ public class Spring {
 	public float length2;
 
 	public void update() {
+		Util.T1.set(p0.curPos).sub(p1.curPos);
 
-		float deltaX = p0.x - p1.x;
-		float deltaY = p0.y - p1.y;
-		float deltaZ = p0.z - p1.z;
+		float diff = ((length2) / (Util.T1.len2() + length2) - 0.5f) * dampening;
 
-		// slow
+		Util.T1.scl(diff);
 
-		// float dist = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY +
-		// deltaZ * deltaZ);
-		// float diff = (float) (dist - Math.sqrt(length2)) / dist;
-		// diff *= -0.5f;
-
-		// fast
-		float dist2 = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
-		float diff = ((length2) / (dist2 + length2) - 0.5f) * dampening;
-
-		deltaX *= diff;
-		deltaY *= diff;
-		deltaZ *= diff;
-
-		p0.ox -= deltaX;
-		p1.ox += deltaX;
-		p0.oy -= deltaY;
-		p1.oy += deltaY;
-		p0.oz -= deltaZ;
-		p1.oz += deltaZ;
+		p0.oldPos.sub(Util.T1);
+		p1.oldPos.add(Util.T1);
 	}
 
 	public void set(Particle p0, Particle p1, float length2) {

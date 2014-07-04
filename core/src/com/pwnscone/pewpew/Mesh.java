@@ -1,6 +1,7 @@
 package com.pwnscone.pewpew;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.pwnscone.pewpew.util.Util;
 
 public class Mesh {
 	public Particle[] particles;
@@ -39,20 +40,14 @@ public class Mesh {
 			particles[v] = new Particle();
 			particles[v].setPosition(x, y, z);
 			particles[v].index = v;
-			// System.out.println(x + "," + y + "," + z);
 			v++;
 		}
 		while (index < words.length) {
 			index++;
 			Particle p0 = particles[Integer.parseInt(words[index++]) - 1];
 			Particle p1 = particles[Integer.parseInt(words[index++]) - 1];
-			float x = p0.x - p1.x;
-			float y = p0.y - p1.y;
-			float z = p0.z - p1.z;
-			float length2 = x * x + y * y + z * z;
 			springs[l] = new Spring();
-			springs[l].set(p0, p1, length2);
-			// System.out.println(p0 + "," + p1 + "," + length);
+			springs[l].set(p0, p1, Util.T1.set(p0.curPos).sub(p1.curPos).len2());
 			l++;
 		}
 	}
