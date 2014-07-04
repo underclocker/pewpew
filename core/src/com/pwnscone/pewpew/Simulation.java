@@ -6,7 +6,6 @@ import java.util.HashMap;
 import com.pwnscone.pewpew.actor.Actor;
 import com.pwnscone.pewpew.actor.Tetra;
 import com.pwnscone.pewpew.util.Pool;
-import com.pwnscone.pewpew.util.Util;
 
 public class Simulation {
 	private final HashMap<Class, Pool<Actor>> mActorMap;
@@ -21,24 +20,6 @@ public class Simulation {
 		mActorMap = new HashMap<Class, Pool<Actor>>();
 		mActorMap.put(Tetra.class, new Pool<Actor>(Tetra.class));
 		mActorList = new ArrayList<Pool<Actor>>(mActorMap.values());
-
-		for (int i = 0; i < 3000; i++) {
-			Particle p0 = addParticle();
-			p0.setPosition((float) (32.0 * Math.random() - 16), (float) (32.0 * Math.random() - 16));
-			Particle p1 = addParticle();
-			p1.setPosition((float) (32.0 * Math.random() - 16), (float) (32.0 * Math.random() - 16));
-			Particle p2 = addParticle();
-			p2.setPosition((float) (32.0 * Math.random() - 16), (float) (32.0 * Math.random() - 16));
-			Particle p3 = addParticle();
-			p3.setPosition((float) (32.0 * Math.random() - 16),
-					(float) (32.0 * Math.random() - 16), 1.0f);
-			addSpring(p0, p1, .015f);
-			addSpring(p1, p2, .015f);
-			addSpring(p2, p0, .015f);
-			addSpring(p3, p0, .015f);
-			addSpring(p3, p1, .015f);
-			addSpring(p3, p2, .015f);
-		}
 	}
 
 	public void update() {
@@ -51,13 +32,18 @@ public class Simulation {
 		for (int i = 0; i < mActorList.size(); i++) {
 			Pool<Actor> actorPool = mActorList.get(i);
 			for (int j = 0; j < actorPool.fill; j++) {
-				actorPool.get(i).update();
+				actorPool.get(j).update();
 			}
 		}
 	}
 
 	public void create() {
-		((Tetra) mActorMap.get(Tetra.class).add()).create();
+		for (int i = 0; i < 2000; i++) {
+			Tetra t = ((Tetra) mActorMap.get(Tetra.class).add()).create();
+			t.setTransform((float) (6.0f * Math.random() - 3.0f),
+					(float) (6.0f * Math.random() - 3.0f), (float) (Math.random() * Math.PI * 2.0f));
+			t.setVelocity(0.0f, 0.0f);
+		}
 	}
 
 	public Particle addParticle() {
@@ -73,7 +59,10 @@ public class Simulation {
 	}
 
 	public Spring addSpring(Particle p0, Particle p1) {
-		return addSpring(p0, p1, Util.T1.set(p0.curPos).sub(p1.curPos).len2());
+		float x = p0.x - p1.x;
+		float y = p0.y - p1.y;
+		float z = p0.z - p1.z;
+		return addSpring(p0, p1, x * x + y * y + z * z);
 	}
 
 	public Spring addSpring(Particle p0, Particle p1, float length2) {

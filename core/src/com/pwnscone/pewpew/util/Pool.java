@@ -28,5 +28,6 @@ public class Pool<E> extends ArrayList<E> {
 		set(fill - 1, (E) removed);
 		((Poolable) oldLast).index = (removed).index;
 		removed.index = fill - 1;
+		fill--;
 	}
 }

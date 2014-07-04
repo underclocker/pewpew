@@ -1,5 +1,6 @@
 package com.pwnscone.pewpew.actor;
 
+import com.badlogic.gdx.math.Vector3;
 import com.pwnscone.pewpew.Game;
 import com.pwnscone.pewpew.Mesh;
 import com.pwnscone.pewpew.MeshManager;
@@ -7,6 +8,7 @@ import com.pwnscone.pewpew.Particle;
 import com.pwnscone.pewpew.Simulation;
 import com.pwnscone.pewpew.Spring;
 import com.pwnscone.pewpew.util.Poolable;
+import com.pwnscone.pewpew.util.Util;
 
 public class Actor extends Poolable {
 	protected Particle[] particles;
@@ -27,7 +29,7 @@ public class Actor extends Poolable {
 		for (int i = 0; i < mesh.particles.length; i++) {
 			Particle meshParticle = mesh.particles[i];
 			Particle particle = sim.addParticle();
-			particle.setPosition(meshParticle.curPos);
+			particle.setPosition(meshParticle.x, meshParticle.y, meshParticle.z);
 			particles[i] = particle;
 		}
 		for (int i = 0; i < mesh.springs.length; i++) {
@@ -38,7 +40,46 @@ public class Actor extends Poolable {
 		}
 	}
 
-	protected void setTransformation(float x, float y, float z, float theta) {
+	public void setTransform(float x, float y, float theta) {
+		Vector3 v = getCenter();
+		float cx = v.x;
+		float cy = v.y;
 
+		float cos = (float) Math.cos(theta);
+		float sin = (float) Math.sin(theta);
+
+		for (int i = 0; i < particles.length; i++) {
+			Particle p = particles[i];
+			p.x -= cx;
+			p.y -= cy;
+
+			float nx = p.x * cos - p.y * sin;
+			p.y = p.x * sin + p.y * cos;
+			p.x = nx;
+
+			p.x += cx + x;
+			p.y += cy + y;
+		}
+	}
+
+	public void setVelocity(float x, float y) {
+		for (int i = 0; i < particles.length; i++) {
+			Particle p = particles[i];
+			p.ox = p.x - x;
+			p.oy = p.y - y;
+		}
+	}
+
+	protected Vector3 getCenter() {
+		float x = 0, y = 0;
+
+		for (int i = 0; i < particles.length; i++) {
+			Particle p = particles[i];
+			x += p.x;
+			y += p.y;
+		}
+
+		Util.T1.set(x / particles.length, y / particles.length, 0.0f);
+		return Util.T1;
 	}
 }

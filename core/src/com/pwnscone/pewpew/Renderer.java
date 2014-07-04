@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pwnscone.pewpew.util.Pool;
-import com.pwnscone.pewpew.util.Util;
 
 public class Renderer {
 	private static final boolean DEBUG = true;
@@ -35,17 +34,17 @@ public class Renderer {
 			Spring spring = springPool.get(i);
 			Particle p0 = spring.p0;
 			Particle p1 = spring.p1;
-			lineRenderer.drawLine(p0.curPos, Color.WHITE, p1.curPos, Color.WHITE);
+			lineRenderer.drawLine(p0.x, p0.y, Color.WHITE, p1.x, p1.y, Color.WHITE);
 		}
 		if (DEBUG) {
 			Pool<Particle> particlePool = Game.get().getSimulation().mParticlePool;
 			for (int i = 0; i < particlePool.fill; i++) {
-				Particle particle = particlePool.get(i);
-				if (particle.mark) {
-					Util.T1.set(particle.curPos).add(.05f, .05f, .05f);
-					lineRenderer.drawLine(particle.curPos, Color.GREEN, Util.T1, Color.GREEN);
-					Util.T1.set(particle.curPos).sub(0, .1f, 0);
-					lineRenderer.drawLine(particle.curPos, Color.GREEN, Util.T1, Color.GREEN);
+				Particle p = particlePool.get(i);
+				if (p.mark) {
+					lineRenderer.drawLine(p.x - .03f, p.y - .03f, Color.GREEN, p.x + .03f,
+							p.y + .03f, Color.GREEN);
+					lineRenderer.drawLine(p.x + .03f, p.y - .03f, Color.GREEN, p.x + .03f,
+							p.y - .03f, Color.GREEN);
 				}
 			}
 		}
