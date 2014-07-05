@@ -1,5 +1,7 @@
 package com.pwnscone.pewpew;
 
+import graphics.Renderer;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -29,7 +31,6 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create() {
 		GAME = this;
-		MeshManager.loadMeshes();
 		renderer = new Renderer();
 		simulation = new Simulation();
 		backgroundInputProcessor = new BackgroundInputProcessor();

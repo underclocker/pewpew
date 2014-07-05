@@ -1,5 +1,6 @@
 package com.pwnscone.pewpew;
 
+import com.pwnscone.pewpew.util.Misc;
 import com.pwnscone.pewpew.util.Poolable;
 
 public class Particle extends Poolable {
@@ -60,5 +61,23 @@ public class Particle extends Poolable {
 		ox = x - vx;
 		oy = y - vy;
 		oz = z;
+	}
+
+	public void cpy(Particle p) {
+		x = p.x;
+		y = p.y;
+		z = p.z;
+
+		ox = p.ox;
+		oy = p.oy;
+		oz = p.oz;
+
+		dampening = p.dampening;
+	}
+
+	public void bump(float strength) {
+		ox += strength * (Misc.random() - .5f);
+		oy += strength * (Misc.random() - .5f);
+		oz += strength * (Misc.random() - .5f);
 	}
 }

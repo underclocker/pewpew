@@ -7,8 +7,9 @@ import com.pwnscone.pewpew.MeshManager;
 import com.pwnscone.pewpew.Particle;
 import com.pwnscone.pewpew.Simulation;
 import com.pwnscone.pewpew.Spring;
+import com.pwnscone.pewpew.util.Misc;
+import com.pwnscone.pewpew.util.Pool;
 import com.pwnscone.pewpew.util.Poolable;
-import com.pwnscone.pewpew.util.Util;
 
 public class Actor extends Poolable {
 	protected Particle[] particles;
@@ -18,7 +19,9 @@ public class Actor extends Poolable {
 	public float x;
 	public float y;
 
-	public Actor() {
+	public float health;
+
+	protected void initFromMesh() {
 		Mesh m = MeshManager.getMesh(this.getClass());
 		particles = new Particle[m.particles.length];
 		springs = new Spring[m.springs.length];
@@ -83,7 +86,34 @@ public class Actor extends Poolable {
 			y += p.y;
 		}
 
-		Util.T1.set(x / particles.length, y / particles.length, 0.0f);
-		return Util.T1;
+		Misc.T1.set(x / particles.length, y / particles.length, 0.0f);
+		return Misc.T1;
+	}
+
+	public void damage(float damage) {
+		health -= damage;
+	}
+
+	public void kick(float x, float y) {
+
+	}
+
+	public void destroy() {
+		Simulation sim = Game.get().getSimulation();
+		Pool<Actor> trashPool = sim.mActorMap.get(Trash.class);
+		for (int i = 0; i < springs.length; i++) {
+			Spring spring = springs[i];
+			Trash t = (Trash) trashPool.add();
+			t.set(spring, sim);
+			t.bump(.015f);
+			sim.removeSpring(spring);
+		}
+		for (int i = 0; i < particles.length; i++) {
+			sim.removeParticle(particles[i]);
+		}
+	}
+
+	public void forget(Actor actor) {
+
 	}
 }

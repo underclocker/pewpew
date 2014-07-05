@@ -1,5 +1,6 @@
 package com.pwnscone.pewpew;
 
+import com.badlogic.gdx.graphics.Color;
 import com.pwnscone.pewpew.util.Poolable;
 
 public class Spring extends Poolable {
@@ -9,6 +10,7 @@ public class Spring extends Poolable {
 	public Particle p0;
 	public Particle p1;
 	public float length2;
+	public Color color;
 
 	public void update() {
 
@@ -39,9 +41,10 @@ public class Spring extends Poolable {
 		p1.oz += deltaZ;
 	}
 
-	public void set(Particle p0, Particle p1, float length2) {
+	public void set(Particle p0, Particle p1, float length2, Color color) {
 		this.p0 = p0;
 		this.p1 = p1;
 		this.length2 = length2;
+		this.color = color;
 	}
 }

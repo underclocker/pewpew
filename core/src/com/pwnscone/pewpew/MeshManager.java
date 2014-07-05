@@ -16,7 +16,7 @@ public class MeshManager {
 		return MESH_MAP.get(c);
 	}
 
-	public static void loadMeshes() {
+	static {
 		load("models/tetra.obj", Tetra.class);
 	}
 }

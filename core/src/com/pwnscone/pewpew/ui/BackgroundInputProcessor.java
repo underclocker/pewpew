@@ -4,7 +4,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.pwnscone.pewpew.Game;
-import com.pwnscone.pewpew.util.Util;
+import com.pwnscone.pewpew.util.Misc;
 
 public class BackgroundInputProcessor implements InputProcessor {
 	private float rotation;
@@ -59,7 +59,7 @@ public class BackgroundInputProcessor implements InputProcessor {
 		if (pointer == 0) {
 			float angle = (float) (Math.atan2(screenPivot.y - lastMove.y, screenPivot.x
 					- lastMove.x) - Math.atan2(screenPivot.y - screenY, screenPivot.x - screenX))
-					* Util.RAD_TO_DEG;
+					* Misc.RAD_TO_DEG;
 			if (angle < -180) {
 				angle += 360;
 			} else if (angle > 180) {

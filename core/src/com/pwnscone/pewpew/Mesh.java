@@ -1,6 +1,7 @@
 package com.pwnscone.pewpew;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 
 public class Mesh {
 	public Particle[] particles;
@@ -49,7 +50,7 @@ public class Mesh {
 			float x = p0.x - p1.x;
 			float y = p0.y - p1.y;
 			float z = p0.z - p1.z;
-			springs[l].set(p0, p1, x * x + y * y + z * z);
+			springs[l].set(p0, p1, x * x + y * y + z * z, Color.WHITE);
 			l++;
 		}
 	}
