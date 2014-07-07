@@ -40,8 +40,7 @@ public class Mesh {
 			particles[v] = new Particle();
 			particles[v].setPosition(x, y, z);
 			particles[v].index = v;
-			// System.out.println(v + ":" + particles[v].x + "," +
-			// particles[v].y);
+			System.out.println(v + ":" + particles[v].x + "," + particles[v].y);
 			v++;
 		}
 		while (index < words.length) {

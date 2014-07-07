@@ -95,7 +95,7 @@ public class Actor extends Poolable {
 	}
 
 	public void kick(float x, float y, Particle p) {
-		p.bump(.02f);
+		p.bump(.005f);
 		p.ox -= x;
 		p.oy -= y;
 	}
@@ -117,6 +117,9 @@ public class Actor extends Poolable {
 
 	public void forget(Actor actor) {
 
+	}
+
+	public void create() {
 	}
 
 	public Particle getRandomParticle() {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 import com.pwnscone.pewpew.actor.Hub;
 import com.pwnscone.pewpew.actor.Tetra;
+import com.pwnscone.pewpew.actor.TetraSpawner;
 
 public class MeshManager {
 	private static HashMap<Class, Mesh> MESH_MAP = new HashMap<Class, Mesh>();
@@ -20,5 +21,6 @@ public class MeshManager {
 	static {
 		load("models/tetra.obj", Tetra.class);
 		load("models/hub.obj", Hub.class);
+		load("models/tetraSpawner.obj", TetraSpawner.class);
 	}
 }

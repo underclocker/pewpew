@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.pwnscone.pewpew.actor.Actor;
 import com.pwnscone.pewpew.actor.Hub;
 import com.pwnscone.pewpew.actor.Tetra;
+import com.pwnscone.pewpew.actor.TetraSpawner;
 import com.pwnscone.pewpew.actor.Trash;
 import com.pwnscone.pewpew.util.Misc;
 import com.pwnscone.pewpew.util.Pool;
@@ -25,10 +26,13 @@ public class Simulation {
 		mParticlePool = new Pool<Particle>(Particle.class);
 		mSpringPool = new Pool<Spring>(Spring.class);
 		mLaserPool = new Pool<Laser>(Laser.class);
+
 		mActorMap = new HashMap<Class, Pool<Actor>>();
 		mActorMap.put(Tetra.class, new Pool<Actor>(Tetra.class));
 		mActorMap.put(Trash.class, new Pool<Actor>(Trash.class));
 		mActorMap.put(Hub.class, new Pool<Actor>(Hub.class));
+		mActorMap.put(TetraSpawner.class, new Pool<Actor>(TetraSpawner.class));
+
 		mActorList = new ArrayList<Pool<Actor>>(mActorMap.values());
 	}
 
@@ -75,7 +79,7 @@ public class Simulation {
 
 	public void create() {
 		Pool<Actor> tetraPool = mActorMap.get(Tetra.class);
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 20; i++) {
 			Tetra t = (Tetra) tetraPool.add();
 			t.create();
 			t.setTransform(0, 0, (float) (Misc.random() * Math.PI * 2.0f));
@@ -84,6 +88,8 @@ public class Simulation {
 		Pool<Actor> hubPool = mActorMap.get(Hub.class);
 		Hub h = (Hub) hubPool.add();
 		h.create();
+
+		h.spawn(TetraSpawner.class);
 	}
 
 	public Particle addParticle() {

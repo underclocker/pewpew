@@ -5,18 +5,18 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.pwnscone.pewpew.Game;
+import com.pwnscone.pewpew.actor.Hub;
+import com.pwnscone.pewpew.actor.TetraSpawner;
 import com.pwnscone.pewpew.util.Misc;
 
 public class BackgroundInputProcessor implements InputProcessor {
 	private float rotation;
-	private float zoom;
 	private Vector3 lastDown;
 	private Vector3 lastMove;
 	private Vector3 screenPivot;
 
 	public BackgroundInputProcessor() {
 		rotation = 0;
-		zoom = 1;
 		lastDown = new Vector3();
 		lastMove = new Vector3();
 		screenPivot = new Vector3();
@@ -46,6 +46,10 @@ public class BackgroundInputProcessor implements InputProcessor {
 			rotation = 0;
 			lastDown.set(screenX, screenY, 0.0f);
 			lastMove.set(lastDown);
+		} else {
+
+			Hub hub = (Hub) Game.get().getSimulation().mActorMap.get(Hub.class).get(0);
+			hub.spawn(TetraSpawner.class);
 		}
 		return true;
 	}
@@ -54,7 +58,6 @@ public class BackgroundInputProcessor implements InputProcessor {
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if (pointer == 0) {
 			rotation = 0;
-			zoom = 1;
 		}
 		return true;
 	}
@@ -72,30 +75,6 @@ public class BackgroundInputProcessor implements InputProcessor {
 			}
 			rotation += angle;
 			lastMove.set(screenX, screenY, 0.0f);
-
-			if (false) {
-				float dx = screenPivot.x - lastDown.x;
-				float dy = screenPivot.y - lastDown.y;
-				float dist = (float) Math.sqrt(dx * dx + dy * dy);
-
-				dx = screenPivot.x - screenX;
-				dy = screenPivot.y - screenY;
-				float dist2 = (float) Math.sqrt(dx * dx + dy * dy);
-
-				zoom = dist2 / dist;
-				if (zoom > 1.35f) {
-					zoom -= .35f;
-					zoom = (1 + zoom) / 2f;
-					zoom = (1 + zoom) / 2f;
-				} else if (zoom < .75f) {
-					zoom += .25f;
-				} else {
-					zoom = 1;
-				}
-				zoom = (1 + zoom) / 2f;
-				zoom = (1 + zoom) / 2f;
-				zoom = (1 + zoom) / 2f;
-			}
 		}
 		return true;
 	}
@@ -116,11 +95,5 @@ public class BackgroundInputProcessor implements InputProcessor {
 		float delta = rotation * .25f;
 		rotation -= delta;
 		camera.rotateAround(Vector3.Zero, camera.direction, delta);
-
-		if ((camera.zoom < 3 && zoom > 1) || (camera.zoom > .75f && zoom < 1)) {
-			camera.zoom *= zoom;
-			camera.position.x *= zoom;
-			camera.position.y *= zoom;
-		}
 	}
 }

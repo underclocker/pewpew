@@ -16,6 +16,8 @@ public class Tetra extends Actor {
 	public float targetY;
 	public int shotTimer;
 	public int shotDelay;
+	public int shotHoldDelay;
+	public int shotHoldTimer;
 	public int shotRange2;
 
 	public float damage;
@@ -37,7 +39,8 @@ public class Tetra extends Actor {
 			targetParticle = targetActor.getRandomParticle();
 			if (targetActor == this || true) {
 				targetActor = null;
-				targetActor = Game.get().getSimulation().mActorMap.get(Hub.class).getRandom();
+				targetActor = Game.get().getSimulation().mActorMap.get(TetraSpawner.class)
+						.getRandom();
 				if (targetActor != null) {
 					targetParticle = targetActor.getRandomParticle();
 				}
@@ -77,14 +80,19 @@ public class Tetra extends Actor {
 			}
 			if (shotTimer < 0 && dot > 0) {
 				float dist2 = xDelta * xDelta + yDelta * yDelta;
-				if (dist2 < shotRange2 && dist2 > .125f && targetActor != null) {
+				if (dist2 < shotRange2 && dist2 > .5f && targetActor != null) {
 					Game.get().getSimulation().addLaser(particles[2].x, particles[2].y, targetX,
 							targetY, Color.GREEN);
-					shotTimer = shotDelay;
 					targetActor.damage(damage);
 					dist2 *= kickback;
 					targetActor.kick(xDelta * Math.abs(xDelta / dist2), yDelta
 							* Math.abs(yDelta / dist2), targetParticle);
+
+					shotHoldTimer--;
+					if (shotHoldTimer < 0) {
+						shotTimer = shotDelay;
+						shotHoldTimer = shotHoldDelay;
+					}
 				}
 			}
 		}
@@ -107,11 +115,13 @@ public class Tetra extends Actor {
 
 		shotTimer = 0;
 		shotDelay = 30;
-		shotRange2 = 5 * 5;
+		shotHoldTimer = 0;
+		shotHoldDelay = 1;
+		shotRange2 = 6 * 6;
 		// higher is weaker
-		kickback = 65f;
+		kickback = 100f;
 
-		damage = 15;
+		damage = 10;
 		health = 100;
 	}
 
