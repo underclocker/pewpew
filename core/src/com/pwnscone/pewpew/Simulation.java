@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Color;
 import com.pwnscone.pewpew.actor.Actor;
+import com.pwnscone.pewpew.actor.Hub;
 import com.pwnscone.pewpew.actor.Tetra;
 import com.pwnscone.pewpew.actor.Trash;
 import com.pwnscone.pewpew.util.Misc;
@@ -27,13 +28,13 @@ public class Simulation {
 		mActorMap = new HashMap<Class, Pool<Actor>>();
 		mActorMap.put(Tetra.class, new Pool<Actor>(Tetra.class));
 		mActorMap.put(Trash.class, new Pool<Actor>(Trash.class));
+		mActorMap.put(Hub.class, new Pool<Actor>(Hub.class));
 		mActorList = new ArrayList<Pool<Actor>>(mActorMap.values());
 	}
 
 	public void update() {
 		mLaserPool.clear();
 
-		// System.out.println(Gdx.graphics.getFramesPerSecond());
 		for (int i = 0; i < mSpringPool.fill; i++) {
 			mSpringPool.get(i).update();
 		}
@@ -62,19 +63,27 @@ public class Simulation {
 				}
 			}
 		}
+
+		if (false) {
+			Pool<Actor> tetraPool = mActorMap.get(Tetra.class);
+			Tetra t = (Tetra) tetraPool.add();
+			t.create();
+			t.setTransform(0, 0, (float) (Misc.random() * Math.PI * 2.0f));
+			t.setVelocity(0.0f, 0.0f);
+		}
 	}
 
 	public void create() {
-		Actor a = null;
-		for (int i = 0; i < 2000; i++) {
-			Tetra t = (Tetra) mActorMap.get(Tetra.class).add();
+		Pool<Actor> tetraPool = mActorMap.get(Tetra.class);
+		for (int i = 0; i < 100; i++) {
+			Tetra t = (Tetra) tetraPool.add();
 			t.create();
-			t.setTransform((float) (6.0f * Misc.random() - 3.0f),
-					(float) (6.0f * Misc.random() - 3.0f), (float) (Misc.random() * Math.PI * 2.0f));
+			t.setTransform(0, 0, (float) (Misc.random() * Math.PI * 2.0f));
 			t.setVelocity(0.0f, 0.0f);
-			t.target = a;
-			a = t;
 		}
+		Pool<Actor> hubPool = mActorMap.get(Hub.class);
+		Hub h = (Hub) hubPool.add();
+		h.create();
 	}
 
 	public Particle addParticle() {

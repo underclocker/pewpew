@@ -2,6 +2,7 @@ package com.pwnscone.pewpew.actor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.pwnscone.pewpew.Game;
+import com.pwnscone.pewpew.Particle;
 
 public class Tetra extends Actor {
 	public static final float rightingSpeed = .25f;
@@ -20,7 +21,8 @@ public class Tetra extends Actor {
 	public float damage;
 	public float kickback;
 
-	public Actor target = null;
+	public Actor targetActor = null;
+	public Particle targetParticle = null;
 
 	public Tetra() {
 		initFromMesh();
@@ -28,9 +30,26 @@ public class Tetra extends Actor {
 
 	@Override
 	public void update() {
-		if (target != null) {
-			targetX = target.x;
-			targetY = target.y;
+
+		// Find Target
+		if (targetActor == null) {
+			targetActor = Game.get().getSimulation().mActorMap.get(Tetra.class).getRandom();
+			targetParticle = targetActor.getRandomParticle();
+			if (targetActor == this || true) {
+				targetActor = null;
+				targetActor = Game.get().getSimulation().mActorMap.get(Hub.class).getRandom();
+				if (targetActor != null) {
+					targetParticle = targetActor.getRandomParticle();
+				}
+			}
+		}
+
+		if (targetActor != null) {
+			targetX = targetParticle.x;
+			targetY = targetParticle.y;
+		} else {
+			targetX = 0;
+			targetY = 0;
 		}
 		float xDir = (particles[2].x - particles[1].x) + (particles[2].x - particles[3].x);
 		float yDir = (particles[2].y - particles[1].y) + (particles[2].y - particles[3].y);
@@ -58,14 +77,14 @@ public class Tetra extends Actor {
 			}
 			if (shotTimer < 0 && dot > 0) {
 				float dist2 = xDelta * xDelta + yDelta * yDelta;
-				if (dist2 < shotRange2 && target != null) {
-					Game.get().getSimulation().addLaser(particles[2].x, particles[2].y, target.x,
-							target.y, Color.GREEN);
+				if (dist2 < shotRange2 && dist2 > .125f && targetActor != null) {
+					Game.get().getSimulation().addLaser(particles[2].x, particles[2].y, targetX,
+							targetY, Color.GREEN);
 					shotTimer = shotDelay;
-					target.damage(damage);
+					targetActor.damage(damage);
 					dist2 *= kickback;
-					target.kick(xDelta * Math.abs(xDelta / dist2), yDelta
-							* Math.abs(yDelta / dist2));
+					targetActor.kick(xDelta * Math.abs(xDelta / dist2), yDelta
+							* Math.abs(yDelta / dist2), targetParticle);
 				}
 			}
 		}
@@ -80,39 +99,27 @@ public class Tetra extends Actor {
 	public void create() {
 		loadMesh();
 
+		for (int i = 0; i < particles.length; i++) {
+			particles[i].dampening = 0.95f;
+		}
+
 		speed = .01f;
 
 		shotTimer = 0;
 		shotDelay = 30;
 		shotRange2 = 5 * 5;
 		// higher is weaker
-		kickback = 50f;
+		kickback = 65f;
 
 		damage = 15;
 		health = 100;
-
-		targetX = 0;
-		targetY = 0;
 	}
 
 	@Override
 	public void forget(Actor a) {
-		if (target == a) {
-			target = null;
+		if (targetActor == a) {
+			targetActor = null;
+			targetParticle = null;
 		}
-	}
-
-	@Override
-	public void kick(float x, float y) {
-		particles[0].bump(.02f);
-		particles[2].bump(.02f);
-		particles[0].ox -= x;
-		particles[0].oy -= y;
-		particles[1].ox -= x;
-		particles[1].oy -= y;
-		particles[2].ox -= x;
-		particles[2].oy -= y;
-		particles[3].ox -= x;
-		particles[3].oy -= y;
 	}
 }

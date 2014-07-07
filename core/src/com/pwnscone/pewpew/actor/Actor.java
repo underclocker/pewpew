@@ -94,8 +94,10 @@ public class Actor extends Poolable {
 		health -= damage;
 	}
 
-	public void kick(float x, float y) {
-
+	public void kick(float x, float y, Particle p) {
+		p.bump(.02f);
+		p.ox -= x;
+		p.oy -= y;
 	}
 
 	public void destroy() {
@@ -115,5 +117,9 @@ public class Actor extends Poolable {
 
 	public void forget(Actor actor) {
 
+	}
+
+	public Particle getRandomParticle() {
+		return particles[(int) Math.floor(Misc.random() * (particles.length))];
 	}
 }

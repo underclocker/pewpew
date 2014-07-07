@@ -3,6 +3,7 @@ package com.pwnscone.pewpew;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
+import com.pwnscone.pewpew.actor.Hub;
 import com.pwnscone.pewpew.actor.Tetra;
 
 public class MeshManager {
@@ -18,5 +19,6 @@ public class MeshManager {
 
 	static {
 		load("models/tetra.obj", Tetra.class);
+		load("models/hub.obj", Hub.class);
 	}
 }

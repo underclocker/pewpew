@@ -3,10 +3,10 @@ package com.pwnscone.pewpew.util;
 import java.util.ArrayList;
 
 public class Pool<E> extends ArrayList<E> {
-	public final Class clazz;
+	public final Class<?> clazz;
 	public int fill = 0;
 
-	public Pool(Class clazz) {
+	public Pool(Class<?> clazz) {
 		this.clazz = clazz;
 	}
 
@@ -33,5 +33,11 @@ public class Pool<E> extends ArrayList<E> {
 
 	public void clear() {
 		fill = 0;
+	}
+
+	public E getRandom() {
+		if (fill == 0)
+			return null;
+		return this.get((int) Math.floor(Misc.random() * (fill - 1)));
 	}
 }
