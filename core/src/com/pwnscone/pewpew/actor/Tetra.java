@@ -37,7 +37,7 @@ public class Tetra extends Actor {
 		if (targetActor == null) {
 			targetActor = Game.get().getSimulation().mActorMap.get(Tetra.class).getRandom();
 			targetParticle = targetActor.getRandomParticle();
-			if (targetActor == this || true) {
+			if (targetActor == this) {
 				targetActor = null;
 				targetActor = Game.get().getSimulation().mActorMap.get(TetraSpawner.class)
 						.getRandom();
@@ -119,7 +119,7 @@ public class Tetra extends Actor {
 		shotHoldDelay = 1;
 		shotRange2 = 6 * 6;
 		// higher is weaker
-		kickback = 100f;
+		kickback = 70f;
 
 		damage = 10;
 		health = 100;

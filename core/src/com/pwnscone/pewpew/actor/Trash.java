@@ -40,7 +40,7 @@ public class Trash extends Actor {
 		Particle p0 = sim.addParticle();
 		Particle p1 = sim.addParticle();
 		Spring sprg = sim.addSpring(p0, p1, spring.length2);
-		sprg.color = Misc.FiftyPercentGray;
+		sprg.color = Misc.SeventyFivePercentGray;
 
 		p0.cpy(spring.p0);
 		p1.cpy(spring.p1);

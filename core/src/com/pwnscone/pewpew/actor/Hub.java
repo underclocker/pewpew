@@ -18,6 +18,7 @@ public class Hub extends Actor {
 	public ArrayList<Spring> umbilicalSpringList;
 	public HashMap<Actor, Particle> dockingParticleMap;
 	public ArrayList<Particle> dockingParticleList;
+	public ArrayList<Particle> valenceParticleList;
 
 	public Hub() {
 		initFromMesh();
@@ -33,9 +34,6 @@ public class Hub extends Actor {
 		Particle center = particles[42];
 		Particle top = particles[11];
 		Particle bottom = particles[0];
-		Particle rot0 = particles[24];
-		Particle rot1 = particles[25];
-		Particle rot2 = particles[31];
 
 		x = center.x;
 		y = center.y;
@@ -44,31 +42,25 @@ public class Hub extends Actor {
 		center.oy += center.y * centering;
 		center.oz += center.z * centering;
 
-		top.ox -= .0011f;
-		top.oy -= .0011f;
-		top.oz -= .0058f;
-		bottom.ox += .0011f;
-		bottom.oy += .0011f;
-		bottom.oz += .0058f;
+		float spin = (1.0f + modules.size()) * .5f;
+		top.ox -= .0011f * spin;
+		top.oy -= .0011f * spin;
+		top.oz -= .0058f * spin;
+		bottom.ox += .0011f * spin;
+		bottom.oy += .0011f * spin;
+		bottom.oz += .0058f * spin;
+		spin *= 2 * 0.0375f * Hub.spin;
 
-		float spin = this.spin * (1 + modules.size());
-
-		float dX = (rot1.x - rot0.x) * spin;
-		float dY = (rot1.y - rot0.y) * spin;
-		float dZ = (rot1.z - rot0.z) * spin;
-
-		rot0.x += dX;
-		rot0.y += dY;
-		rot0.z += dZ;
-
-		rot2.x -= dX;
-		rot2.y -= dY;
-		rot2.z -= dZ;
+		for (int i = 0; i < particles.length; i++) {
+			Particle p = particles[i];
+			p.ox += p.y * spin;
+			p.oy -= p.x * spin;
+		}
 
 		for (int i = 0; i < umbilicalSpringList.size(); i++) {
 			Spring s = umbilicalSpringList.get(i);
-			if (s.length2 > .025f) {
-				s.length2 *= 0.997f;
+			if (s.length2 > .00025f) {
+				s.length2 *= 0.99f;
 			}
 		}
 	}
@@ -83,44 +75,47 @@ public class Hub extends Actor {
 		umbilicalSpringList.clear();
 
 		dockingParticleList.add(particles[22]);
-		dockingParticleList.add(particles[25]);
-		dockingParticleList.add(particles[28]);
 		dockingParticleList.add(particles[31]);
-		dockingParticleList.add(particles[24]);
-		dockingParticleList.add(particles[27]);
-		dockingParticleList.add(particles[30]);
-		dockingParticleList.add(particles[23]);
 		dockingParticleList.add(particles[26]);
+		dockingParticleList.add(particles[24]);
+		dockingParticleList.add(particles[23]);
+		dockingParticleList.add(particles[28]);
+		dockingParticleList.add(particles[27]);
+		dockingParticleList.add(particles[25]);
+		dockingParticleList.add(particles[30]);
 		dockingParticleList.add(particles[29]);
 
 		health = 5000;
 	}
 
 	public void spawn(Class clazz) {
-		Simulation sim = Game.get().getSimulation();
-		Pool<Actor> pool = sim.mActorMap.get(clazz);
-		Actor actor = pool.add();
-		actor.create();
-		actor.setVelocity(0.0f, 0.001f);
-		modules.add(actor);
-		Particle docPart = dockingParticleList.remove(0);
-		dockingParticleMap.put(actor, docPart);
-		float bestDist = 0;
-		Particle closest = actor.particles[0];
-		bestDist = Float.MAX_VALUE;
-		for (int i = 0; i < actor.particles.length; i++) {
-			Particle p = actor.particles[i];
-			float dx = p.x - docPart.x;
-			float dy = p.y - docPart.y;
-			float dist2 = dx * dx + dy * dy;
-			if (dist2 < bestDist) {
-				closest = p;
-				bestDist = dist2;
+		if (dockingParticleList.size() > 0) {
+			Simulation sim = Game.get().getSimulation();
+			Pool<Actor> pool = sim.mActorMap.get(clazz);
+			Actor actor = pool.add();
+			actor.create();
+			modules.add(actor);
+			Particle docPart = dockingParticleList.remove(0);
+			dockingParticleMap.put(actor, docPart);
+			float bestDist = 0;
+			Particle closest = actor.particles[0];
+			bestDist = -Float.MAX_VALUE;
+			for (int i = 0; i < actor.particles.length; i++) {
+				Particle p = actor.particles[i];
+				float dx = p.x - docPart.x;
+				float dy = p.y - docPart.y;
+				float dist2 = dx * dx + dy * dy;
+				if (dist2 > bestDist) {
+					closest = p;
+					bestDist = dist2;
+				}
 			}
+			actor.setTransform(docPart.x - closest.x, docPart.y - closest.y, 0);
+			actor.setVelocity(0.0f, 0.0f);
+			Spring spring = sim.addSpring(docPart, closest);
+			umbilicalSpringMap.put(actor, spring);
+			umbilicalSpringList.add(spring);
 		}
-		Spring spring = sim.addSpring(docPart, closest);
-		umbilicalSpringMap.put(actor, spring);
-		umbilicalSpringList.add(spring);
 	}
 
 	@Override

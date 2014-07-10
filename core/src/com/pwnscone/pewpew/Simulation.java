@@ -78,18 +78,9 @@ public class Simulation {
 	}
 
 	public void create() {
-		Pool<Actor> tetraPool = mActorMap.get(Tetra.class);
-		for (int i = 0; i < 20; i++) {
-			Tetra t = (Tetra) tetraPool.add();
-			t.create();
-			t.setTransform(0, 0, (float) (Misc.random() * Math.PI * 2.0f));
-			t.setVelocity(0.0f, 0.0f);
-		}
 		Pool<Actor> hubPool = mActorMap.get(Hub.class);
 		Hub h = (Hub) hubPool.add();
 		h.create();
-
-		h.spawn(TetraSpawner.class);
 	}
 
 	public Particle addParticle() {

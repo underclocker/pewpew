@@ -7,7 +7,7 @@ public class Misc {
 	public static float RAD_TO_DEG = (float) (180.0 / Math.PI);
 	public static float DEG_TO_RAD = (float) (Math.PI / 180.0);
 	public static Vector3 T1 = new Vector3();
-	public static Color FiftyPercentGray = new Color(.5f, .5f, .5f, 1.0f);
+	public static Color SeventyFivePercentGray = new Color(.65f, .65f, .65f, 1.0f);
 
 	private static float[] randoms;
 	private static int randIndex;
