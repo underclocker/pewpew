@@ -23,8 +23,8 @@ public class Tetra extends Actor {
 	public float damage;
 	public float kickback;
 
-	public Actor targetActor = null;
-	public Particle targetParticle = null;
+	public Actor targetActor;
+	public Particle targetParticle;
 
 	public Tetra() {
 		initFromMesh();
@@ -120,6 +120,8 @@ public class Tetra extends Actor {
 		shotRange2 = 6 * 6;
 		// higher is weaker
 		kickback = 70f;
+		targetActor = null;
+		targetParticle = null;
 
 		damage = 10;
 		health = 100;
